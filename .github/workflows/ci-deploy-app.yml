@@ -1,11 +1,16 @@
-name: CI-admin-app
+name: CI-deploy-manual
 
 on:
-  push:
-    branches:
-      - 6-deploy
-    paths:
-      - 'apps/admin/**'
+  workflow_dispatch:
+    inputs:
+      service_name:
+        description: '배포할 서비스명을 선택해주세요.'
+        required: true
+        default: 'wanted'
+        type: choice
+        options:
+          - wanted
+          - admin
 
 jobs:
   test:
@@ -25,6 +30,6 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       - name: Build web-app
-        working-directory: apps/admin
+        working-directory: apps/${{ inputs.service_name }}
         run: |
           yarn build
